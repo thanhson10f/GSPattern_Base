@@ -1,0 +1,31 @@
+﻿using System.Xml.Serialization;
+using System.IO;
+
+namespace GSP.Web.Core.Models
+{
+    public class UserInfo
+    {
+        public string DisplayName { get; set; }
+        public string UserIdentifier { get; set; }
+        public int UserId { get; set; }
+        public string RoleName { get; set; }
+        public override string ToString()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(UserInfo));
+            using (var stream = new System.IO.StringWriter())
+            {
+                serializer.Serialize(stream, this);
+                return stream.ToString();
+            }
+        }
+
+        public static UserInfo FromString(string userContextData)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(UserInfo));
+            using (var stream = new StringReader(userContextData))
+            {
+                return serializer.Deserialize(stream) as UserInfo;
+            }
+        }
+    }
+}
